@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 
@@ -12,21 +13,21 @@ public class DialogueManager : MonoBehaviour
 	 */
     #region Data Members
 
+    [Header("File Path")]
     [SerializeField] private string filePath;
     public string fileName;
     private string path;
 
-    private List<string> dialogueQueue;
+    private List<string> dialogueQueue = new List<string>();
 
-    #endregion
+    [Header("Dialogue Boxes")]
+    [SerializeField] private GameObject VNDialogueBox;
+    [SerializeField] private GameObject NXDialogueBox;
+    private Text VNDialogueBoxText;
+    private Text NXDialogueBoxText;
 
-
-    /**
-	 * Modifies the data members so that they may
-	 * be read-only, return specific values, or
-	 * expose certain data members to the public
-	 */
-    #region Member Properties
+    [Header("Text Options")]
+    [SerializeField] private float scrollDelay;
 
     #endregion
 
@@ -36,23 +37,24 @@ public class DialogueManager : MonoBehaviour
 	 */
     #region Unity Methods
 
-    #endregion
+    private void Awake()
+    {
+        // Initialize file path
+        path = filePath + fileName;
 
+        // Initialize text components
+        VNDialogueBoxText = VNDialogueBox.GetComponentInChildren<Text>();
+        NXDialogueBoxText = NXDialogueBox.GetComponentInChildren<Text>();
+    }
 
-    /**
-	 * Constructors that are called when building
-	 * the class.
-	 */
-    #region Constructors
+    private void Start()
+    {
+        // Initialize parser
+        TextParser.ReadFileIntoQueue(path, ref dialogueQueue);
 
-    #endregion
-
-
-    /**
-	 * Methods that are able to be called from
-	 * outside of the class.
-	 */
-    #region Public Methods
+        // Start dialogue
+        StartCoroutine(RevealDialogue(VNDialogueBoxText));
+    }
 
     #endregion
 
@@ -62,6 +64,24 @@ public class DialogueManager : MonoBehaviour
 	 * within this class.
 	 */
     #region Member Functions
+
+    // Reveals text is a typewriter-like fashion, and
+    // requires the player to press any key to move on
+    // to the next piece of dialogue in the queue
+    private IEnumerator RevealDialogue(Text dialogueBoxText)
+    {
+        foreach (string dialogue in dialogueQueue)
+        {
+            for (int i = 0; i <= dialogue.Length; ++i)
+            {
+                string currentText = dialogue.Substring(0, i);
+                dialogueBoxText.text = currentText;
+                yield return new WaitForSeconds(scrollDelay);
+            }
+            while (!Input.anyKey)
+                yield return new WaitForSeconds(.05f);
+        }
+    }
 
     #endregion
 }

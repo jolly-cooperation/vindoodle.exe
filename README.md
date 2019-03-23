@@ -1,4 +1,4 @@
-# vindoodle.exe
-Apparently this is the 1st one, not text adventure because fuck you
+![alt text](https://i.imgur.com/v58QGpI.jpg "vindoodle.exe")
 
-And I hate you all
+##### what if the ehnancement you wanted
+# wasnt' enhancment

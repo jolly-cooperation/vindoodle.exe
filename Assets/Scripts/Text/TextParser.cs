@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 
@@ -10,7 +11,7 @@ public static class TextParser
 
     // Reads text files line by line and converts each read line into a
     // string that is then pushbacked into a queue
-    public static void ReadFileIntoQueue(string path, ref List<string> queue)
+    public static void ReadFileIntoQueue(string path, ref Queue<DialogueTuple> queue)
     {
         if (!File.Exists(path))
             throw new FileLoadException("Dialogue file (" + path + ") does not exist");
@@ -26,7 +27,7 @@ public static class TextParser
                 // Adds read file line (up to newline) and pushbacks to
                 // the queue
                 while ((fileLine = reader.ReadLine()) != null)
-                    queue.Add(ParseInlineSymbols(fileLine));
+                    queue.Enqueue( new DialogueTuple( "Fag", ParseInlineSymbols(fileLine) ) );
             }
         }
         catch (IOException e)

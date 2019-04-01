@@ -18,12 +18,14 @@ public class DialogueManager : MonoBehaviour
     public string fileName;
     private string path;
 
-    private List<string> dialogueQueue = new List<string>();
+    private Queue<DialogueTuple> dialogueQueue = new Queue<DialogueTuple>();
 
     [Header("Dialogue Boxes")]
     [SerializeField] private GameObject VNDialogueBox;
     [SerializeField] private GameObject NXDialogueBox;
+    private Text VNDialogueBoxCharName;
     private Text VNDialogueBoxText;
+    private Text NXDialogueBoxCharName;
     private Text NXDialogueBoxText;
 
     [Header("Text Options")]
@@ -42,9 +44,13 @@ public class DialogueManager : MonoBehaviour
         // Initialize file path
         path = filePath + fileName;
 
-        // Initialize text components
-        VNDialogueBoxText = VNDialogueBox.GetComponentInChildren<Text>();
-        NXDialogueBoxText = NXDialogueBox.GetComponentInChildren<Text>();
+        // Initialize text components for VN UI
+        Text[] VNChildren = VNDialogueBox.GetComponentsInChildren<Text>();
+        VNDialogueBoxCharName = VNChildren[0];
+        VNDialogueBoxText     = VNChildren[1];
+
+        // Initialize text components for NX UI
+        NXDialogueBoxText = NXDialogueBox.GetComponentsInChildren<Text>()[0];
     }
 
     private void Start()
@@ -53,7 +59,7 @@ public class DialogueManager : MonoBehaviour
         TextParser.ReadFileIntoQueue(path, ref dialogueQueue);
 
         // Start dialogue
-        StartCoroutine(RevealDialogue(VNDialogueBoxText));
+        StartCoroutine(RevealDialogue(VNDialogueBoxCharName, VNDialogueBoxText));
     }
 
     #endregion
@@ -68,16 +74,35 @@ public class DialogueManager : MonoBehaviour
     // Reveals text is a typewriter-like fashion, and
     // requires the player to press any key to move on
     // to the next piece of dialogue in the queue
-    private IEnumerator RevealDialogue(Text dialogueBoxText)
+    private IEnumerator RevealDialogue(Text dialogueBoxCharName, Text dialogueBoxText)
     {
-        foreach (string dialogue in dialogueQueue)
+        // Continue to go through dialogue queue until empty
+        while (dialogueQueue.Count > 0)
         {
-            for (int i = 0; i <= dialogue.Length; ++i)
+            // Dequeue and label dialogue box with character's
+            // name
+            DialogueTuple tuple = dialogueQueue.Dequeue();
+            dialogueBoxCharName.text = tuple.name;
+
+            // Typewriter animation
+            for (int i = 0; i <= tuple.dialogue.Length; ++i)
             {
-                string currentText = dialogue.Substring(0, i);
+                // Check if user inputted an action to skip the
+                // animation of the dialogue
+                if (Input.anyKeyDown)
+                {
+                    dialogueBoxText.text = tuple.dialogue;
+                    yield return new WaitForSeconds(.5f);
+                    break;
+                }
+
+                string currentText = tuple.dialogue.Substring(0, i);
                 dialogueBoxText.text = currentText;
                 yield return new WaitForSeconds(scrollDelay);
             }
+
+            // Wait for user input before moving onto next
+            // dialogue
             while (!Input.anyKey)
                 yield return new WaitForSeconds(.05f);
         }

@@ -6,11 +6,16 @@ using UnityEngine;
 
 
 
+/// <summary>
+/// Static class that allows you to parse files and interpret them
+/// with Regex.
+/// </summary>
 public static class TextParser
 {
-
-    // Reads text files line by line and converts each read line into a
-    // string that is then pushbacked into a queue
+    /// <summary>
+    /// Reads text files line by line and converts each read line into a
+    /// string that is then pushbacked into a queue.
+    /// </summary>
     public static void ReadFileIntoQueue(string path, ref Queue<DialogueTuple> queue)
     {
         if (!File.Exists(path))

@@ -4,6 +4,11 @@ using UnityEngine;
 
 
 
+/// <summary>
+/// The primary director that contains all of the
+/// managers and is the primary object that controls
+/// every aspect of the game.
+/// </summary>
 public class GameDirector : MonoBehaviour 
 {
     /**
@@ -13,7 +18,9 @@ public class GameDirector : MonoBehaviour
     #region Data Members
 
     [Header("Managers")]
+    [Tooltip("The GameObject that controls dialogue")]
     [SerializeField] private GameObject dialogueManager;
+    [Tooltip("The GameObject that controls the UI")]
     [SerializeField] private GameObject uiManager;
 
 	#endregion

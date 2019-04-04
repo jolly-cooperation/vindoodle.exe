@@ -1,4 +1,9 @@
-﻿enum CharEnum
+﻿/// <summary>
+/// All the characters with assigned int ID's. These characters
+/// are in the order of their appearence in the Subportrait
+/// Character texture.
+/// </summary>
+enum CharEnum
 {
     Kirstie         = 0,
     Gallagher       = 1,

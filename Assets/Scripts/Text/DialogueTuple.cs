@@ -1,4 +1,8 @@
-﻿public class DialogueTuple
+﻿/// <summary>
+/// A simple container that holds a character's name
+/// and their associated dialogue.
+/// </summary>
+public class DialogueTuple
 {
     /**
 	 * Holds all the data members that the class
@@ -18,6 +22,10 @@
 	 */
     #region Constructors
 
+    /// <summary>
+    /// Constructor based off of a character's name and
+    /// their dialogue.
+    /// </summary>
     public DialogueTuple(string newName, string newDialogue)
     {
         name     = newName;

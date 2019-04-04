@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 
 
+/// <summary>
+/// Primary controller for the dialogue system.
+/// </summary>
 public class DialogueManager : MonoBehaviour 
 {
     /**
@@ -14,14 +17,18 @@ public class DialogueManager : MonoBehaviour
     #region Data Members
 
     [Header("File Path")]
+    [Tooltip("Requires standard file formatting excluding the file name (./Assets/folder/)")]
     [SerializeField] private string filePath;
+    [Tooltip("Requires the file name and extension given the path above")]
     public string fileName;
     private string path;
 
     private Queue<DialogueTuple> dialogueQueue = new Queue<DialogueTuple>();
 
     [Header("Dialogue Boxes")]
+    [Tooltip("The \"Visual Novel\" style UI Canvas GameObject")]
     [SerializeField] private GameObject VNDialogueBox;
+    [Tooltip("The \"Vindictus (Nexon)\" style UI Canvas GameObject")]
     [SerializeField] private GameObject NXDialogueBox;
     private Text VNDialogueBoxCharName;
     private Text VNDialogueBoxText;
@@ -29,6 +36,8 @@ public class DialogueManager : MonoBehaviour
     private Text NXDialogueBoxText;
 
     [Header("Text Options")]
+    [Tooltip("The delay used between the reveal of the characters in the " +
+        "dialogue box")]
     [SerializeField] private float scrollDelay;
 
     #endregion
@@ -71,9 +80,11 @@ public class DialogueManager : MonoBehaviour
 	 */
     #region Member Functions
 
-    // Reveals text is a typewriter-like fashion, and
-    // requires the player to press any key to move on
-    // to the next piece of dialogue in the queue
+    /// <summary>
+    /// Reveals text is a typewriter-like fashion, and
+    /// requires the player to press any key to move on
+    /// to the next piece of dialogue in the queue.
+    /// </summary>
     private IEnumerator RevealDialogue(Text dialogueBoxCharName, Text dialogueBoxText)
     {
         // Continue to go through dialogue queue until empty

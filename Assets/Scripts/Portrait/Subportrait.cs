@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 
 /// <summary>
-/// A instantiable class/prefab that contains all
-/// information regarding a Subportrait.
+/// A instantiable class/prefab component 
+/// that contains all information 
+/// regarding a Subportrait.
 /// </summary>
-public class Subportrait : MonoBehaviour 
+public class Subportrait : MonoBehaviour
 {
     /**
 	 * Holds all the data members that the class
@@ -22,13 +23,17 @@ public class Subportrait : MonoBehaviour
     [ReadOnly] [SerializeField] private string m_name;
     [ReadOnly] [SerializeField] private bool m_isSpeaking;
     [SerializeField] private GameObject charName;
+    [SerializeField] private GameObject portrait;
     private SubportraitTuple m_picture;
-
 
     // Subportrait Backgrounds
     [Header("Subportrait Background Sprites")]
     [SerializeField] private GameObject idleBackground;
     [SerializeField] private GameObject speakBackground;
+
+    // Additional Options
+    [Header("Additional Options")]
+    [SerializeField] [Slider(0.0f, 1.0f)] private float notSpeakingAlphaLevel;
 
     #endregion
 
@@ -57,22 +62,6 @@ public class Subportrait : MonoBehaviour
 	 */
     #region Constructors
 
-    /// <summary>
-    /// Constructor based off of a character's name and their respective
-    /// SubportraitTuple that specifies their position on the Subportrait
-    /// Character texture.
-    /// </summary>
-    public Subportrait(string name, SubportraitTuple subportrait)
-    {
-        // Set data members
-        m_name = name;
-        m_isSpeaking = false;
-        m_picture = subportrait;
-
-        // Set associated GameObject members
-        charName.GetComponent<Text>().text = name;
-    }
-
     #endregion
 
 
@@ -81,6 +70,29 @@ public class Subportrait : MonoBehaviour
 	 * outside of the class.
 	 */
     #region Public Methods
+
+    /// <summary>
+    /// A pseudo-constructor based off of a character's name and their respective
+    /// SubportraitTuple that specifies their position on the Subportrait
+    /// Character texture. Called with the same parameters as a normal constructors,
+    /// but should be called after instantiating an instance of this object (given
+    /// that the object is a prefab).
+    /// </summary>
+    public void Initalize(string name, SubportraitTuple subportrait)
+    {
+        // Set data members
+        m_name = name;
+        m_isSpeaking = false;
+        m_picture = subportrait;
+
+        // Set associated GameObject members
+        charName.GetComponent<Text>().text = name;
+        GetComponent<CanvasGroup>().alpha = notSpeakingAlphaLevel;
+        portrait.GetComponent<RawImage>().uvRect = 
+            new Rect((float)m_picture.uvX, (float)m_picture.uvY, 
+            portrait.GetComponent<RawImage>().uvRect.width, 
+            portrait.GetComponent<RawImage>().uvRect.height);
+    }
 
     /// <summary>
     /// Sets the background of the Subportrait to
@@ -95,11 +107,13 @@ public class Subportrait : MonoBehaviour
         {
             idleBackground.SetActive(false);
             speakBackground.SetActive(true);
+            GetComponent<CanvasGroup>().alpha = 1.0f;
         }
         else
         {
             idleBackground.SetActive(true);
             speakBackground.SetActive(false);
+            GetComponent<CanvasGroup>().alpha = .5f;
         }
     }
 

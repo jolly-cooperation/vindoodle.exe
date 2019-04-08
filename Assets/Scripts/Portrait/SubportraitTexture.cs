@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using UnityEngine;
+
+/// <summary>
 /// Container that holds all of the UV positions based
 /// on the CharEnum. Use as a static Singleton.
 /// </summary>
@@ -37,7 +39,6 @@ public class SubportraitTexture
     public SubportraitTuple this[int i]
     {
         get { return m_characters[i]; }
-        set { return; }
     }
 
 	#endregion

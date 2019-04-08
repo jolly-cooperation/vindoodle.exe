@@ -26,9 +26,9 @@ public class DialogueManager : MonoBehaviour
     private Queue<DialogueTuple> dialogueQueue = new Queue<DialogueTuple>();
 
     [Header("Dialogue Boxes")]
-    [Tooltip("The \"Visual Novel\" style UI Canvas GameObject")]
+    [Tooltip("The \"Visual Novel\" style UI Dialogue GameObject")]
     [SerializeField] private GameObject VNDialogueBox;
-    [Tooltip("The \"Vindictus (Nexon)\" style UI Canvas GameObject")]
+    [Tooltip("The \"Vindictus (Nexon)\" style UI Dialogue GameObject")]
     [SerializeField] private GameObject NXDialogueBox;
     private Text VNDialogueBoxCharName;
     private Text VNDialogueBoxText;

@@ -62,7 +62,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1749622753958368
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,8 +144,10 @@ MonoBehaviour:
   m_name: 
   m_isSpeaking: 0
   charName: {fileID: 1706514812583698}
+  portrait: {fileID: 1862007664087612}
   idleBackground: {fileID: 1749622753958368}
   speakBackground: {fileID: 1736290789334020}
+  notSpeakingAlphaLevel: 0.5
 --- !u!114 &114197745723058918
 MonoBehaviour:
   m_ObjectHideFlags: 1

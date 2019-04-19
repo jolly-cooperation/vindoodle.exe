@@ -2,7 +2,7 @@
 
 /// <summary>
 /// Container that holds all of the UV positions based
-/// on the CharEnum. Use as a static Singleton.
+/// on the CharID. Use as a static Singleton.
 /// </summary>
 public class SubportraitTexture 
 {
@@ -14,15 +14,15 @@ public class SubportraitTexture
 
     /// <summary>
     /// All the characters UV coordinate positions on the subportrait texture
-    /// which is reflective of the CharEnum
+    /// which is reflective of the CharID
     /// Kirstie,         Gallagher,      Ferghus,        Tieve,
     /// Mysterious Man,  Brynn,          Clodagh,        Ceara,
     /// Gwynn,           Marrec,         Aodhan
     /// </summary>
     private SubportraitTuple[] m_characters = new SubportraitTuple[11] {
-            new SubportraitTuple(0.00,0.67), new SubportraitTuple(0.25,0.67), new SubportraitTuple(0.50,0.67), new SubportraitTuple(0.75,0.67),
-            new SubportraitTuple(0.00,0.34), new SubportraitTuple(0.25,0.34), new SubportraitTuple(0.50,0.34), new SubportraitTuple(0.75,0.34),
-            new SubportraitTuple(0.00,0.00), new SubportraitTuple(0.25,0.00), new SubportraitTuple(0.50,0.00) };
+            new SubportraitTuple(0.000,0.670), new SubportraitTuple(0.250,0.670), new SubportraitTuple(0.500,0.670), new SubportraitTuple(0.750,0.670),
+            new SubportraitTuple(0.000,0.334), new SubportraitTuple(0.250,0.334), new SubportraitTuple(0.500,0.334), new SubportraitTuple(0.750,0.334),
+            new SubportraitTuple(0.000,0.000), new SubportraitTuple(0.250,0.000), new SubportraitTuple(0.500,0.000) };
 
     #endregion
 
@@ -33,7 +33,7 @@ public class SubportraitTexture
     #region Public Methods
 
     /// <summary>
-    /// Indexer that supports indexing by CharEnum and by normal
+    /// Indexer that supports indexing by CharID and by normal
     /// int (ReadOnly).
     /// </summary>
     public SubportraitTuple this[int i]

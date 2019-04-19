@@ -3,7 +3,7 @@
 /// are in the order of their appearence in the Subportrait
 /// Character texture.
 /// </summary>
-enum CharEnum
+enum CharID
 {
     Kirstie         = 0,
     Gallagher       = 1,

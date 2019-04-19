@@ -25,6 +25,7 @@ public class Subportrait : MonoBehaviour
     [SerializeField] private GameObject charName;
     [SerializeField] private GameObject portrait;
     private SubportraitTuple m_picture;
+    private int m_charID;
 
     // Subportrait Backgrounds
     [Header("Subportrait Background Sprites")]
@@ -44,6 +45,22 @@ public class Subportrait : MonoBehaviour
 	 * expose certain data members to the public
 	 */
     #region Member Properties
+
+    /// <summary>
+    /// The name of the character.
+    /// </summary>
+    public string Name { get { return m_name; } }
+
+    /// <summary>
+    /// The GameObject that displays the character's
+    /// name.
+    /// </summary>
+    public GameObject CharName { get { return charName; } }
+
+    /// <summary>
+    /// The ID of the character (CharID).
+    /// </summary>
+    public int CharID { get { return m_charID; } }
 
     #endregion
 
@@ -78,10 +95,11 @@ public class Subportrait : MonoBehaviour
     /// but should be called after instantiating an instance of this object (given
     /// that the object is a prefab).
     /// </summary>
-    public void Initalize(string name, SubportraitTuple subportrait)
+    public void Initalize(int character, SubportraitTuple subportrait)
     {
         // Set data members
-        m_name = name;
+        m_charID = character;
+        m_name = ((CharID)character).ToString();
         m_isSpeaking = false;
         m_picture = subportrait;
 

@@ -58,8 +58,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject background;
 
     // Speaking character members
-    private GameObject currentSpeaker;
-    private GameObject lastSpeaker;
+    private GameObject currentSpeaker = null;
+    private GameObject lastSpeaker = null;
+
+    // DEBUG
+    private int DEBUG_charID_index = 0;
 
     #endregion
 
@@ -100,7 +103,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Sets the Main Portrait Sprite to another
     /// character. It is recommended to use the
-    /// CharEnum for clarity, but defaults to an
+    /// CharID for clarity, but defaults to an
     /// integer.
     /// </summary>
     public void SetMainPortrait(int character)
@@ -131,12 +134,12 @@ public class UIManager : MonoBehaviour
     {
         // Instantiate new Subportrait GameObject from prefab and add
         // to the subportraitList for tracking
-        string characterName = ((CharEnum)character).ToString();
         GameObject subportrait = Instantiate(subportraitPrefab, VNCanvas.transform);
         subportrait.SetActive(true);
         subportraitList.Add(subportrait);
         activeSubportraitCount = subportraitList.Count;
-        subportrait.GetComponent<Subportrait>().Initalize(characterName, m_subportraitTexture[character]);
+        Subportrait currentSubportrait = subportrait.GetComponent<Subportrait>();
+        currentSubportrait.Initalize(character, m_subportraitTexture[character]);
 
         // Given how many portraits are on the list, offset the new
         // subportrait by a set offset in respect to the last subportrait's
@@ -159,15 +162,65 @@ public class UIManager : MonoBehaviour
                 .GetComponent<RectTransform>().anchoredPosition;
             subportraitTransform.anchoredPosition = lastPortraitPosition + xOffset;
         }
-
-        subportrait.name = "Subportrait (" + characterName + ")";
+        
+        // Sets the name of the GameObject itself (inspector) and in-game (CharName)
+        subportrait.name = "Subportrait (" + currentSubportrait.Name + ")";
+        currentSubportrait.CharName.GetComponent<Text>().text = currentSubportrait.Name;
     }
 
     /// <summary>
+    /// Removes a Subportrait from the Subportrait List
+    /// given the character's CharID.
     /// </summary>
-    public void ChangeSpeaker()
+    public void RemoveSubportraitByCharacter(int character)
     {
+        int index = FindIndexForSubportrait(character);
+
+        GameObject subportrait = subportraitList[index-1];
+        subportraitList.RemoveAt(index-1);
+        Destroy(subportrait);
+        activeSubportraitCount = subportraitList.Count;
     }
+
+    /// <summary>
+    /// Removes a Subportrait from the Subportrait List
+    /// given the character's position on the list.
+    /// </summary>
+    public void RemoveSubportraitByIndex(int index)
+    {
+        GameObject subportrait = subportraitList[index];
+        subportraitList.RemoveAt(index);
+        Destroy(subportrait);
+        activeSubportraitCount = subportraitList.Count;
+    }
+
+    /// <summary>
+    /// Effectively activates the passed in character
+    /// and deactivates the previous character.
+    /// Calls the EnableSpeaker method on the current
+    /// character passing True, while also calling the
+    /// same method on the previous subportrait passing
+    /// False. 
+    /// </summary>
+    public void ChangeSpeaker(int character)
+    {
+        lastSpeaker = currentSpeaker;
+        int nextSpeakerIndex = FindIndexForSubportrait(character);
+
+        currentSpeaker = subportraitList[nextSpeakerIndex];
+        currentSpeaker.GetComponent<Subportrait>().EnableSpeaker(true);
+        lastSpeaker.GetComponent<Subportrait>().EnableSpeaker(false);
+    }
+
+    // DEBUG PURPOSES ONLY
+    public void DEBUG_Create_Char_And_Iterate()
+    { InstantiateSubportrait(DEBUG_charID_index); DEBUG_charID_index = (++DEBUG_charID_index % 11); }
+
+    public void DEBUG_Delete_Char_And_Deiterate()
+    { RemoveSubportraitByCharacter(DEBUG_charID_index); DEBUG_charID_index = (DEBUG_charID_index >= 0) ? DEBUG_charID_index-- : 0; }
+
+    public void DEBUG_Delete_Char_At_0()
+    { RemoveSubportraitByIndex(0); }
 
     #endregion
 
@@ -177,6 +230,60 @@ public class UIManager : MonoBehaviour
 	 * within this class.
 	 */
     #region Member Functions
+
+    /// <summary>
+    /// Given the character's enumeration (or int), 
+    /// the function returns the index in which the 
+    /// Subportrait GameObject can be found in the 
+    /// Subportrait List.
+    /// </summary>
+    private int FindIndexForSubportrait(int character)
+    {
+        int index = 0;
+
+        // Iterate through subportrait list to find character
+        foreach (GameObject subportraitGameObject in subportraitList)
+        {
+            if (subportraitGameObject.GetComponent<Subportrait>().CharID == character)
+            {
+                return index;
+            }
+
+            index++;
+        }
+
+        return index;
+    }
+
+    /// <summary>
+    /// Modifies the position of the subportraits 
+    /// to better reflect the order they're in in 
+    /// the list.
+    /// </summary>
+    private void UpdateSubportraits()
+    {
+        // Given how many portraits are on the list, offset the new
+        // subportrait by a set offset in respect to the last subportrait's
+        // position
+        Vector2 xOffset = Vector2.right * 130;
+        //RectTransform subportraitTransform = subportrait.GetComponent<RectTransform>();
+
+        // Modifies the position of the last spawned subportrait given
+        // position and anchor scale
+        if (subportraitList.Count <= 1)
+        { /* Pass since origin is ok */ }
+        else if (subportraitList.Count == 2)
+        {
+            //subportraitTransform.anchoredPosition += xOffset;
+        }
+        else
+        {
+            //Vector2 lastPortraitPosition =
+            //    subportraitList[subportraitList.IndexOf(subportrait) - 1]
+            //    .GetComponent<RectTransform>().anchoredPosition;
+            //subportraitTransform.anchoredPosition = lastPortraitPosition + xOffset;
+        }
+    }
 
     #endregion
 }
